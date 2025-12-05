@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thor Fit Lifestyle - Health Assessment</title>
+    <style>
+        :root {
+            --color-primary: #ff8c00;
+            --color-primary-hover: #e67e00;
+            --color-background: #000000;
+            --color-surface: #1a1a1a;
+            --color-text: #ffffff;
+            --color-text-secondary: #cccccc;
+            --color-border: rgba(94, 82, 64, 0.2);
+            --color-success: #32808d;
+            --color-warning: #e68161;
+            --color-error: #c0152f;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+            --radius-base: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: #ffffff;
+            padding: 20px;
+        }
+
+        .header h1 {
+            color: var(--color-primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666666;
+            font-size: 1.1rem;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        .card {
+            background: #000000;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 140, 0, 0.2);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--color-primary);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .question-section {
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-title {
+            font-size: 1.3rem;
+            color: var(--color-text);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-text);
+            font-weight: 500;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: 1rem;
+            background: var(--color-surface);
+            color: var(--color-text);
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 140, 0, 0.1);
+            border-color: var(--color-primary);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: rgba(94, 82, 64, 0.12);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(94, 82, 64, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .email-section {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .email-section h3 {
+            color: var(--color-primary);
+        }
+
+        input[type="email"],
+        input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: 1rem;
+            background: var(--color-background);
+            color: var(--color-text);
+            transition: border-color 0.2s;
+        }
+
+        input[type="email"]:focus,
+        input[type="tel"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 100%);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .recommendation-card h3 {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stack-features {
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            color: var(--color-success);
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .rationale {
+            background: white;
+            border-left: 4px solid var(--color-primary);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .rationale h4 {
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .shop-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 28px;
+            background: var(--color-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-base);
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .shop-link:hover {
+            background: var(--color-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .additional-recommendations {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .additional-recommendations h3 {
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+
+        .secondary-stack {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-base);
+            margin-bottom: 15px;
+            border: 1px solid var(--color-border);
+        }
+
+        .secondary-stack h4 {
+            color: var(--color-text);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/13261fe6-1ddf-47d4-a3de-21e9ea2a4614" alt="Thor Fit Lifestyle Logo" class="logo" style="background: transparent;">
+            <h1>Thor Fit Lifestyle</h1>
+            <p>Personalized Health Assessment for Silverbacks 40+</p>
+        </div>
+
+        <div class="card">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <!-- Question 1: Basic Info -->
+            <div class="question-section active" id="section1">
+                <h2 class="question-title">Let's start with your basics</h2>
+                <div class="form-group">
+                    <label for="age">What is your age?</label>
+                    <input type="number" id="age" min="18" max="100" placeholder="e.g., 45" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">What is your current bodyweight (kg)?</label>
+                    <input type="number" id="weight" min="40" max="200" placeholder="e.g., 85" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select...</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="nextSection(2)">Next</button>
+                </div>
+            </div>
+
+            <!-- Question 2: Primary Health Concerns -->
+            <div class="question-section" id="section2">
+                <h2 class="question-title">What are your primary health concerns?</h2>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="weight_loss">
+                        <span>Weight loss / Body composition</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="energy">
+                        <span>Low energy / Fatigue</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="sleep">
+                        <span>Poor sleep quality</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="mental_clarity">
+                        <span>Mental fog / Lack of focus</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="gut">
+                        <span>Digestive issues / Gut health</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="recovery">
+                        <span>Slow recovery / Joint pain</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="concerns" value="muscle">
+                        <span>Muscle loss / Weakness</span>
+                    </label>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevSection(1)">Back</button>
+                    <button class="btn btn-primary" onclick="nextSection(3)">Next</button>
+                </div>
+            </div>
+
+            <!-- Question 3: Current Activity Level -->
+            <div class="question-section" id="section3">
+                <h2 class="question-title">How would you describe your current activity level?</h2>
+                <div class="form-group">
+                    <select id="activity" required>
+                        <option value="">Select...</option>
+                        <option value="sedentary">Sedentary - Little to no exercise</option>
+                        <option value="light">Lightly active - 1-2 days/week</option>
+                        <option value="moderate">Moderately active - 3-4 days/week</option>
+                        <option value="active">Very active - 5-6 days/week</option>
+                        <option value="athlete">Athlete - Daily intense training</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevSection(2)">Back</button>
+                    <button class="btn btn-primary" onclick="nextSection(4)">Next</button>
+                </div>
+            </div>
+
+            <!-- Question 4: Sleep Quality -->
+            <div class="question-section" id="section4">
+                <h2 class="question-title">How many hours of quality sleep do you typically get?</h2>
+                <div class="form-group">
+                    <select id="sleep" required>
+                        <option value="">Select...</option>
+                        <option value="poor">Less than 5 hours</option>
+                        <option value="insufficient">5-6 hours</option>
+                        <option value="adequate">6-7 hours</option>
+                        <option value="good">7-8 hours</option>
+                        <option value="optimal">8+ hours</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevSection(3)">Back</button>
+                    <button class="btn btn-primary" onclick="nextSection(5)">Next</button>
+                </div>
+            </div>
+
+            <!-- Question 5: Stress & Recovery -->
+            <div class="question-section" id="section5">
+                <h2 class="question-title">How would you rate your stress levels and recovery?</h2>
+                <div class="form-group">
+                    <label for="stress">Daily stress level</label>
+                    <select id="stress" required>
+                        <option value="">Select...</option>
+                        <option value="low">Low - Well managed</option>
+                        <option value="moderate">Moderate - Manageable</option>
+                        <option value="high">High - Challenging</option>
+                        <option value="severe">Very high - Overwhelming</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="recovery">Post-exercise recovery time</label>
+                    <select id="recovery" required>
+                        <option value="">Select...</option>
+                        <option value="fast">Quick - Ready next day</option>
+                        <option value="normal">Normal - 1-2 days</option>
+                        <option value="slow">Slow - 3-4 days</option>
+                        <option value="very_slow">Very slow - 5+ days</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevSection(4)">Back</button>
+                    <button class="btn btn-primary" onclick="calculateRecommendation()">Get My Recommendations</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results" id="results">
+                <h2 class="question-title">Your Personalized Supplement Stack</h2>
+                <div id="recommendationContent"></div>
+                
+                <div class="email-section" id="emailSection">
+                    <h3 style="margin-top: 30px; margin-bottom: 15px;">📧 Send Results to Your Coach</h3>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 20px;">
+                        Get your personalized recommendations sent to your email and copied to your Thor Fit coach for follow-up.
+                    </p>
+                    <div class="form-group">
+                        <label for="clientName">Your Full Name</label>
+                        <input type="text" id="clientName" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEmail">Your Email Address</label>
+                        <input type="email" id="clientEmail" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientPhone">Phone Number (Optional)</label>
+                        <input type="tel" id="clientPhone" placeholder="+27 82 123 4567">
+                    </div>
+                    <button class="btn btn-primary" onclick="sendResults()">Send Results & Request Follow-Up</button>
+                    <div id="emailStatus" style="margin-top: 15px;"></div>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="resetAssessment()" style="margin-top: 20px; width: 100%;">Start New Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 5;
+        const userData = {};
+
+        function updateProgress() {
+            const progress = (currentSection / totalSections) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function nextSection(sectionNum) {
+            // Validate current section
+            if (!validateSection(currentSection)) {
+                alert('Please complete all required fields before continuing.');
+                return;
+            }
+
+            document.getElementById('section' + currentSection).classList.remove('active');
+            document.getElementById('section' + sectionNum).classList.add('active');
+            currentSection = sectionNum;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function prevSection(sectionNum) {
+            document.getElementById('section' + currentSection).classList.remove('active');
+            document.getElementById('section' + sectionNum).classList.add('active');
+            currentSection = sectionNum;
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function validateSection(section) {
+            switch(section) {
+                case 1:
+                    const age = document.getElementById('age').value;
+                    const weight = document.getElementById('weight').value;
+                    const gender = document.getElementById('gender').value;
+                    return age && weight && gender;
+                case 2:
+                    const concerns = document.querySelectorAll('input[name="concerns"]:checked');
+                    return concerns.length > 0;
+                case 3:
+                    return document.getElementById('activity').value;
+                case 4:
+                    return document.getElementById('sleep').value;
+                case 5:
+                    return document.getElementById('stress').value && document.getElementById('recovery').value;
+                default:
+                    return true;
+            }
+        }
+
+        function calculateRecommendation() {
+            // Collect all user data
+            userData.age = parseInt(document.getElementById('age').value);
+            userData.weight = parseFloat(document.getElementById('weight').value);
+            userData.gender = document.getElementById('gender').value;
+            userData.activity = document.getElementById('activity').value;
+            userData.sleep = document.getElementById('sleep').value;
+            userData.stress = document.getElementById('stress').value;
+            userData.recovery = document.getElementById('recovery').value;
+            
+            const concerns = [];
+            document.querySelectorAll('input[name="concerns"]:checked').forEach(cb => {
+                concerns.push(cb.value);
+            });
+            userData.concerns = concerns;
+
+            // Calculate recommendation based on user data
+            const recommendation = determineStack(userData);
+            displayRecommendation(recommendation);
+
+            // Show results
+            document.getElementById('section5').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function determineStack(data) {
+            const scores = {
+                sleep: 0,
+                mental: 0,
+                lean: 0,
+                wolverine: 0,
+                gut: 0,
+                basics: 0
+            };
+
+            // Score based on concerns
+            if (data.concerns.includes('sleep')) scores.sleep += 5;
+            if (data.concerns.includes('mental_clarity')) scores.mental += 5;
+            if (data.concerns.includes('weight_loss')) scores.lean += 5;
+            if (data.concerns.includes('recovery')) scores.wolverine += 5;
+            if (data.concerns.includes('gut')) scores.gut += 5;
+            if (data.concerns.includes('energy')) {
+                scores.mental += 3;
+                scores.basics += 3;
+            }
+            if (data.concerns.includes('muscle')) {
+                scores.wolverine += 3;
+                scores.lean += 2;
+            }
+
+            // Score based on sleep quality
+            if (data.sleep === 'poor' || data.sleep === 'insufficient') {
+                scores.sleep += 4;
+                scores.mental += 2;
+            }
+
+            // Score based on stress
+            if (data.stress === 'high' || data.stress === 'severe') {
+                scores.mental += 3;
+                scores.sleep += 2;
+                scores.gut += 2;
+            }
+
+            // Score based on recovery
+            if (data.recovery === 'slow' || data.recovery === 'very_slow') {
+                scores.wolverine += 4;
+                scores.gut += 2;
+            }
+
+            // Score based on activity level
+            if (data.activity === 'active' || data.activity === 'athlete') {
+                scores.wolverine += 3;
+                scores.basics += 2;
+            }
+
+            // Score based on age (40+ focus)
+            if (data.age >= 50) {
+                scores.wolverine += 2;
+                scores.mental += 1;
+                scores.basics += 2;
+            }
+
+            // Find primary recommendation
+            const primaryStack = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            
+            // Find secondary recommendations (top 2 other stacks)
+            const sortedStacks = Object.entries(scores)
+                .filter(([key]) => key !== primaryStack)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 2)
+                .map(([key]) => key);
+
+            return {
+                primary: primaryStack,
+                secondary: sortedStacks,
+                scores: scores,
+                userData: data
+            };
+        }
+
+        function displayRecommendation(recommendation) {
+            const stacks = {
+                sleep: {
+                    name: 'Deep Sleep Stack',
+                    description: 'Optimized for restorative sleep and overnight recovery',
+                    features: [
+                        'Magnesium Glycinate for muscle relaxation and sleep quality',
+                        'Natural sleep support compounds',
+                        'Promotes deeper REM cycles',
+                        'Reduces nighttime waking',
+                        'Supports nervous system recovery'
+                    ],
+                    rationale: ''
+                },
+                mental: {
+                    name: 'Mental Clarity Commander Stack',
+                    description: 'Enhance focus, cognitive function, and mental sharpness',
+                    features: [
+                        'Supports neurotransmitter production',
+                        'Enhances mental clarity and focus',
+                        'Reduces brain fog',
+                        'Boosts cognitive performance',
+                        'Supports stress resilience'
+                    ],
+                    rationale: ''
+                },
+                lean: {
+                    name: 'Lean Legend Stack',
+                    description: 'Comprehensive fat loss and body composition support',
+                    features: [
+                        'Supports metabolic function',
+                        'Helps maintain lean muscle during fat loss',
+                        'Enhances energy expenditure',
+                        'Supports healthy insulin sensitivity',
+                        'Promotes sustainable weight management'
+                    ],
+                    rationale: ''
+                },
+                wolverine: {
+                    name: 'Wolverine Warrior Stack (TB-500 + BPC-157)',
+                    description: 'Elite recovery and tissue repair support',
+                    features: [
+                        'BPC-157: Supports gut healing and tissue repair',
+                        'TB-500: Promotes joint and muscle recovery',
+                        'Accelerates recovery from training',
+                        'Supports connective tissue health',
+                        'Ideal for active individuals 40+ with recovery challenges'
+                    ],
+                    rationale: ''
+                },
+                gut: {
+                    name: 'Gut Guardian Stack',
+                    description: 'Foundation for digestive health and immune function',
+                    features: [
+                        'Colostrum for immune and gut lining support',
+                        'Calcium Magnesium Butyrate for gut health',
+                        'Supports healthy microbiome',
+                        'Reduces bloating and digestive discomfort',
+                        'Foundation for nutrient absorption'
+                    ],
+                    rationale: ''
+                },
+                basics: {
+                    name: 'The Bare Essentials Stack',
+                    description: 'Complete foundation for overall health and vitality',
+                    features: [
+                        'Creatine Monohydrate for energy and muscle support',
+                        'Essential micronutrients',
+                        'Supports energy production',
+                        'Foundation for all other health goals',
+                        'Perfect starting point for Silverbacks 40+'
+                    ],
+                    rationale: ''
+                }
+            };
+
+            const primary = stacks[recommendation.primary];
+            const data = recommendation.userData;
+
+            // Build rationale
+            let rationale = `Based on your assessment, the <strong>${primary.name}</strong> is recommended because: `;
+            let reasons = [];
+
+            if (data.concerns.includes('sleep') && recommendation.primary === 'sleep') {
+                reasons.push('you identified poor sleep quality as a primary concern, which impacts recovery, metabolism, and overall health');
+            }
+            if (data.concerns.includes('mental_clarity') && recommendation.primary === 'mental') {
+                reasons.push('mental fog and lack of focus significantly impact daily performance and quality of life');
+            }
+            if (data.concerns.includes('weight_loss') && recommendation.primary === 'lean') {
+                reasons.push('optimizing body composition requires metabolic support and lean muscle preservation');
+            }
+            if (data.concerns.includes('recovery') && recommendation.primary === 'wolverine') {
+                reasons.push('slow recovery and joint issues require advanced peptide support for tissue repair, especially critical for active individuals over 40');
+            }
+            if (data.concerns.includes('gut') && recommendation.primary === 'gut') {
+                reasons.push('gut health is the foundation of immunity, nutrient absorption, and overall wellness');
+            }
+            if ((data.sleep === 'poor' || data.sleep === 'insufficient') && recommendation.primary === 'sleep') {
+                reasons.push('you\'re getting less than adequate sleep (&lt;6 hours), which impairs recovery, hormone balance, and metabolic health');
+            }
+            if ((data.stress === 'high' || data.stress === 'severe') && (recommendation.primary === 'mental' || recommendation.primary === 'sleep')) {
+                reasons.push('high stress levels deplete neurotransmitters and disrupt sleep architecture');
+            }
+            if ((data.recovery === 'slow' || data.recovery === 'very_slow') && recommendation.primary === 'wolverine') {
+                reasons.push('your extended recovery time (3+ days) suggests compromised tissue repair mechanisms that advanced peptides can address');
+            }
+            if (data.age >= 50 && recommendation.primary === 'wolverine') {
+                reasons.push('at 50+, natural recovery processes slow significantly, making targeted peptide support increasingly beneficial');
+            }
+            if (data.concerns.includes('energy') && recommendation.primary === 'basics') {
+                reasons.push('low energy often stems from fundamental nutritional gaps that the essentials stack addresses');
+            }
+
+            if (reasons.length === 0) {
+                reasons.push('your overall health profile suggests this as the most impactful starting point for your wellness journey');
+            }
+
+            rationale += reasons.join('; ') + '.';
+
+            primary.rationale = rationale;
+
+            let html = `
+                <div class="recommendation-card">
+                    <h3>🎯 Primary Recommendation: ${primary.name}</h3>
+                    <p style="font-size: 1.1rem; color: var(--color-text-secondary); margin-bottom: 15px;">
+                        ${primary.description}
+                    </p>
+                    <div class="stack-features">
+                        <strong>Key Benefits:</strong>
+                        ${primary.features.map(f => `<div class="feature-item">${f}</div>`).join('')}
+                    </div>
+                    <div class="rationale">
+                        <h4>Why This Stack?</h4>
+                        <p>${primary.rationale}</p>
+                    </div>
+                    <a href="https://www.thorfitlifestyle.com/" target="_blank" class="shop-link">
+                        Visit Thor Fit Lifestyle Shop →
+                    </a>
+                </div>
+            `;
+
+            // Add secondary recommendations
+            if (recommendation.secondary.length > 0) {
+                html += '<div class="additional-recommendations"><h3>Additional Recommendations</h3>';
+                
+                recommendation.secondary.forEach(stackKey => {
+                    const stack = stacks[stackKey];
+                    html += `
+                        <div class="secondary-stack">
+                            <h4>${stack.name}</h4>
+                            <p style="color: var(--color-text-secondary); margin-bottom: 10px;">
+                                ${stack.description}
+                            </p>
+                            <small style="color: var(--color-text-secondary);">
+                                Consider adding this stack as your health journey progresses.
+                            </small>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            }
+
+            // Add supplemental product recommendations and individual peptides
+            html += `<div class="additional-recommendations"><h3>Individual Products & Peptides</h3>`;
+            
+            // Determine which individual products to recommend
+            const singleProducts = [];
+            
+            // BPC-157 recommendations
+            if (data.concerns.includes('gut') || data.concerns.includes('recovery')) {
+                singleProducts.push({
+                    name: 'BPC-157 (Body Protection Compound)',
+                    description: 'Powerful peptide for gut healing and tissue repair. Ideal if you have digestive issues or need targeted recovery support.',
+                    reasons: []
+                });
+                if (data.concerns.includes('gut')) {
+                    singleProducts[singleProducts.length - 1].reasons.push('Supports gut lining repair and reduces inflammation');
+                }
+                if (data.concerns.includes('recovery')) {
+                    singleProducts[singleProducts.length - 1].reasons.push('Accelerates healing of tendons, ligaments, and muscles');
+                }
+            }
+            
+            // TB-500 recommendations
+            if ((data.recovery === 'slow' || data.recovery === 'very_slow') || (data.activity === 'active' || data.activity === 'athlete')) {
+                singleProducts.push({
+                    name: 'TB-500 (Thymosin Beta-4)',
+                    description: 'Elite recovery peptide for joint health and muscle repair. Perfect for active individuals experiencing prolonged recovery times.',
+                    reasons: []
+                });
+                if (data.recovery === 'slow' || data.recovery === 'very_slow') {
+                    singleProducts[singleProducts.length - 1].reasons.push('Reduces recovery time from 3+ days to 1-2 days');
+                }
+                if (data.activity === 'active' || data.activity === 'athlete') {
+                    singleProducts[singleProducts.length - 1].reasons.push('Supports high-volume training demands');
+                }
+            }
+            
+            // GHK-Cu recommendations
+            if (data.age >= 45 || data.concerns.includes('recovery')) {
+                singleProducts.push({
+                    name: 'GHK-Cu (Copper Peptide)',
+                    description: 'Anti-aging peptide that supports skin health, tissue regeneration, and collagen production.',
+                    reasons: []
+                });
+                if (data.age >= 45) {
+                    singleProducts[singleProducts.length - 1].reasons.push('Combats age-related tissue breakdown');
+                }
+                if (data.concerns.includes('recovery')) {
+                    singleProducts[singleProducts.length - 1].reasons.push('Enhances wound healing and tissue repair');
+                }
+            }
+            
+            // Creatine (always recommended)
+            singleProducts.push({
+                name: 'Creatine Monohydrate',
+                description: 'Essential foundational supplement for all Silverbacks 40+. Supports muscle strength, cognitive function, and cellular energy.',
+                reasons: ['Proven benefits for strength, cognition, and longevity', 'Pairs perfectly with any stack or peptide protocol']
+            });
+            
+            // Display individual products
+            singleProducts.forEach(product => {
+                html += `
+                    <div class="secondary-stack">
+                        <h4>${product.name}</h4>
+                        <p style="color: var(--color-text-secondary); margin-bottom: 10px;">
+                            ${product.description}
+                        </p>
+                        ${product.reasons.length > 0 ? `
+                            <div style="margin-top: 10px;">
+                                <strong style="font-size: 0.9rem;">Why for you:</strong>
+                                <ul style="margin: 5px 0 0 20px; color: var(--color-text-secondary); font-size: 0.9rem;">
+                                    ${product.reasons.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+
+            document.getElementById('recommendationContent').innerHTML = html;
+        }
+
+        function resetAssessment() {
+            currentSection = 1;
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('section1').classList.add('active');
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function sendResults() {
+            const clientName = document.getElementById('clientName').value.trim();
+            const clientEmail = document.getElementById('clientEmail').value.trim();
+            const clientPhone = document.getElementById('clientPhone').value.trim();
+            const statusDiv = document.getElementById('emailStatus');
+
+            if (!clientName || !clientEmail) {
+                statusDiv.innerHTML = '<p style="color: var(--color-error);">⚠️ Please provide your name and email address.</p>';
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(clientEmail)) {
+                statusDiv.innerHTML = '<p style="color: var(--color-error);">⚠️ Please enter a valid email address.</p>';
+                return;
+            }
+
+            statusDiv.innerHTML = '<p style="color: var(--color-primary);">📤 Preparing your results...</p>';
+
+            // Get recommendation content
+            const recommendationHTML = document.getElementById('recommendationContent').innerHTML;
+            
+            // Format user data for email
+            const concernsText = userData.concerns.map(c => {
+                const labels = {
+                    'weight_loss': 'Weight loss / Body composition',
+                    'energy': 'Low energy / Fatigue',
+                    'sleep': 'Poor sleep quality',
+                    'mental_clarity': 'Mental fog / Lack of focus',
+                    'gut': 'Digestive issues / Gut health',
+                    'recovery': 'Slow recovery / Joint pain',
+                    'muscle': 'Muscle loss / Weakness'
+                };
+                return labels[c];
+            }).join(', ');
+
+            // Create comprehensive email body
+            const emailSubject = `Thor Fit Health Assessment Results - ${clientName}`;
+            const emailBody = `
+NEW CLIENT HEALTH ASSESSMENT - THOR FIT LIFESTYLE
+
+==================================================
+CLIENT INFORMATION
+==================================================
+Name: ${clientName}
+Email: ${clientEmail}
+Phone: ${clientPhone || 'Not provided'}
+Assessment Date: ${new Date().toLocaleString()}
+
+==================================================
+HEALTH PROFILE
+==================================================
+Age: ${userData.age} years old
+Weight: ${userData.weight} kg
+Gender: ${userData.gender}
+Activity Level: ${userData.activity}
+Sleep Quality: ${userData.sleep}
+Stress Level: ${userData.stress}
+Recovery Time: ${userData.recovery}
+
+Primary Health Concerns:
+${concernsText}
+
+==================================================
+RECOMMENDED SUPPLEMENT STACK
+==================================================
+${document.querySelector('.recommendation-card h3').textContent}
+
+Key Benefits:
+${Array.from(document.querySelectorAll('.feature-item')).map(item => '• ' + item.textContent).join('\n')}
+
+RATIONALE:
+${document.querySelector('.rationale p').textContent}
+
+==================================================
+ACTION REQUIRED
+==================================================
+Please follow up with ${clientName} to:
+1. Discuss recommended supplement stack
+2. Create personalized nutrition plan
+3. Establish training protocol
+4. Schedule check-in appointments
+
+Client Contact: ${clientEmail}${clientPhone ? ' | ' + clientPhone : ''}
+
+==================================================
+IMPORTANT: Schedule a consultation call within 48 hours to discuss this assessment and create an action plan.
+
+View full results and shop: https://www.thorfitlifestyle.com/
+            `.trim();
+
+            // Formspree endpoint (replace with your actual Formspree form ID)
+            const formspreeURL = 'https://formspree.io/f/YOUR_FORM_ID';
+            
+            // Alternative: EmailJS setup (more reliable for production)
+            // You'll need to sign up at emailjs.com and replace these IDs
+            const emailData = {
+                to_email: 'coach@thorfitlifestyle.com', // Your coaching email
+                cc_email: clientEmail, // Client gets a copy
+                client_name: clientName,
+                client_email: clientEmail,
+                client_phone: clientPhone,
+                subject: emailSubject,
+                message: emailBody
+            };
+
+            // For now, show success message and save to localStorage
+            // Save assessment data for follow-up
+            const assessmentData = {
+                timestamp: new Date().toISOString(),
+                clientName: clientName,
+                clientEmail: clientEmail,
+                clientPhone: clientPhone,
+                userData: userData,
+                recommendationHTML: recommendationHTML
+            };
+
+            // Store in localStorage
+            let savedAssessments = JSON.parse(localStorage.getItem('thorFitAssessments') || '[]');
+            savedAssessments.push(assessmentData);
+            localStorage.setItem('thorFitAssessments', JSON.stringify(savedAssessments));
+
+            // Create mailto link as fallback
+            const mailtoLink = `mailto:coach@thorfitlifestyle.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}&cc=${encodeURIComponent(clientEmail)}`;
+
+            statusDiv.innerHTML = `
+                <div style="background: rgba(255, 140, 0, 0.1); border-left: 4px solid var(--color-primary); padding: 15px; border-radius: 4px;">
+                    <p style="color: var(--color-success); font-weight: 600; margin-bottom: 10px;">✅ Assessment Saved Successfully!</p>
+                    <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 10px;">
+                        Your results have been saved locally. Click the button below to send via your email client:
+                    </p>
+                    <a href="${mailtoLink}" class="btn btn-primary" style="display: inline-block; text-decoration: none; margin-top: 10px;">
+                        📧 Open Email to Send Results
+                    </a>
+                    <p style="color: var(--color-text-secondary); font-size: 0.85rem; margin-top: 15px;">
+                        <strong>Note to Coach:</strong> Results are also saved locally on this device for your records.
+                        Access saved assessments in browser localStorage.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Function to view saved assessments (for coach)
+        function viewSavedAssessments() {
+            const saved = JSON.parse(localStorage.getItem('thorFitAssessments') || '[]');
+            console.log('Saved Assessments:', saved);
+            alert(`You have ${saved.length} saved assessments. Check browser console for details.`);
+        }
+
+        // Initialize progress bar
+        updateProgress();
+
+        // Optional: Add button to view saved assessments (for testing)
+        // Uncomment this line to add a view button in console:
+        // console.log('To view saved assessments, run: viewSavedAssessments()');
+    </script>
+</body>
+</html>
